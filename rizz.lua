@@ -67,7 +67,7 @@ Tabs.Main:CreateButton({
     Name = "Say Line",
     Callback = function()
         if Line and type(Line) == "string" and Line ~= "Select a line here!" then
-            local TargetChannel = TextChatService.TextChannels["RBXGeneral"]
+            local TargetChannel = TextChatService:FindFirstChild("RBXGeneral")
             if TargetChannel then
                 TargetChannel:SendAsync(Line)
             else
@@ -84,7 +84,7 @@ Tabs.Main:CreateButton({
     Callback = function()
         local RandomLine = Packages.Lines[math.random(1, #Packages.Lines)]
         if RandomLine and type(RandomLine) == "string" then
-            local TargetChannel = TextChatService.TextChannels["RBXGeneral"]
+            local TargetChannel = TextChatService:FindFirstChild("RBXGeneral")
             if TargetChannel then
                 TargetChannel:SendAsync(RandomLine)
             else
