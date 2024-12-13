@@ -16,7 +16,7 @@ local TextChatService = game:GetService("TextChatService")
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "Rizzler - 1.1",
+    Name = "Rizzler - 1-0",
     LoadingTitle = "Rizzler",
     LoadingSubtitle = "by @exrand",
     DisableRayfieldPrompts = true,
@@ -38,7 +38,7 @@ local Window = Rayfield:CreateWindow({
         FileName = "Key",
         SaveKey = true,
         GrabKeyFromSite = false,
-        Key = {"they"}
+        Key = {"therail"}
     }
 })
 
@@ -46,8 +46,8 @@ local Tabs = {
     Main = Window:CreateTab("Main", 4483362458)
 }
 
-local Line = "Select a line here!"
-Tabs.Main:CreateLabel("Ready to send a message?")
+local Line = nil
+Tabs.Main:CreateLabel("Ready to send a message.")
 Tabs.Main:CreateDropdown({
     Name = "Select Line",
     Options = {"Line 1", "Line 2", "Line 3"},
@@ -93,7 +93,7 @@ end
 Tabs.Main:CreateButton({
     Name = "Say Line",
     Callback = function()
-        if Line and type(Line) == "string" and Line ~= "Select a line here!" then
+        if Line and type(Line) == "string" then
             sendMessage(Line)
         else
             warn("Invalid Line selected!")
