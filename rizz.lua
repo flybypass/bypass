@@ -59,20 +59,31 @@ Tabs.Main:CreateDropdown({
     end
 })
 
+-- Get the current channel for the player
+local function getTextChatChannel()
+    local player = game.Players.LocalPlayer
+    for _, channel in pairs(TextChatService:GetChannels()) do
+        if channel.Name == "RBXGeneral" then
+            return channel
+        end
+    end
+    return nil
+end
+
 Tabs.Main:CreateButton({
     Name = "Say Line",
     Callback = function()
         if Line and type(Line) == "string" and Line ~= "Select a line here!" then
-            local chatChannel = TextChatService.ChatStyle
-            if chatChannel then
+            local channel = getTextChatChannel()
+            if channel then
                 local success, err = pcall(function()
-                    chatChannel:SendAsync(Line)
+                    channel:SendAsync(Line)
                 end)
                 if not success then
                     warn("Error sending message: " .. err)
                 end
             else
-                warn("TextChatService chat channel not found!")
+                warn("RBXGeneral chat channel not found!")
             end
         else
             warn("Invalid Line selected!")
@@ -85,16 +96,16 @@ Tabs.Main:CreateButton({
     Callback = function()
         local randomLine = "Hello, world!"  
         if randomLine and type(randomLine) == "string" then
-            local chatChannel = TextChatService.ChatStyle
-            if chatChannel then
+            local channel = getTextChatChannel()
+            if channel then
                 local success, err = pcall(function()
-                    chatChannel:SendAsync(randomLine)
+                    channel:SendAsync(randomLine)
                 end)
                 if not success then
                     warn("Error sending message: " .. err)
                 end
             else
-                warn("TextChatService chat channel not found!")
+                warn("RBXGeneral chat channel not found!")
             end
         else
             warn("No valid random line found!")
