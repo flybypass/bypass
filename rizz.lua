@@ -15,7 +15,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "Rizzler - 1-0",
+    Name = "Rizzler - 1.0",
     LoadingTitle = "Rizzler",
     LoadingSubtitle = "by @exrand",
     DisableRayfieldPrompts = true,
