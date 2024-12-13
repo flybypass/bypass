@@ -14,9 +14,12 @@ local Services = setmetatable({}, {
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TextChatService = game:GetService("TextChatService")
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Packages = {
+    Lines = {"Want to come to my place and watch Family Guy?", "Are you from Tennessee? Because you're the only 10 I see.", "If I could rearrange the alphabet, I’d put “U” and “I” together."}
+}
 
 local Window = Rayfield:CreateWindow({
-    Name = "Rizzler - 1.1",
+    Name = "Rizzler - 1-0",
     LoadingTitle = "Rizzler",
     LoadingSubtitle = "by @exrand",
     DisableRayfieldPrompts = true,
@@ -45,12 +48,13 @@ local Window = Rayfield:CreateWindow({
 local Tabs = {
     Main = Window:CreateTab("Main", 4483362458)
 }
+local RizzlerModule = Tabs.Main:CreateSection("Rizzler")
 
-local Line = nil
-Tabs.Main:CreateLabel("Ready to send a message.")
+Tabs.Main:CreateLabel(#Packages.Lines .. " lines are on your fingertips.")
+local Line = "Select a line here!"
 Tabs.Main:CreateDropdown({
     Name = "Select Line",
-    Options = {"Line 1", "Line 2", "Line 3"},
+    Options = Packages.Lines,
     CurrentOption = {Line},
     MultipleOptions = false,
     Flag = "Dropdown1",
@@ -103,4 +107,3 @@ Tabs.Main:CreateButton({
         end
     end
 })
-
