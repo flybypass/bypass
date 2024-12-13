@@ -48,13 +48,12 @@ local Window = Rayfield:CreateWindow({
 local Tabs = {
     Main = Window:CreateTab("Main", 4483362458)
 }
-local RizzlerModule = Tabs.Main:CreateSection("Rizzler")
 
-Tabs.Main:CreateLabel(#Packages.Lines .. " lines are on your fingertips.")
 local Line = "Select a line here!"
+Tabs.Main:CreateLabel("Ready to send a message?")
 Tabs.Main:CreateDropdown({
     Name = "Select Line",
-    Options = Packages.Lines,
+    Options = {},
     CurrentOption = {Line},
     MultipleOptions = false,
     Flag = "Dropdown1",
@@ -67,9 +66,9 @@ Tabs.Main:CreateButton({
     Name = "Say Line",
     Callback = function()
         if Line and type(Line) == "string" and Line ~= "Select a line here!" then
-            local TargetChannel = TextChatService:FindFirstChild("RBXGeneral")
-            if TargetChannel then
-                TargetChannel:SendAsync(Line)
+            local textChannel = TextChatService:FindFirstChild("RBXGeneral")
+            if textChannel then
+                textChannel:SendAsync(Line)
             else
                 warn("RBXGeneral channel not found!")
             end
@@ -82,11 +81,11 @@ Tabs.Main:CreateButton({
 Tabs.Main:CreateButton({
     Name = "Say Random Line",
     Callback = function()
-        local RandomLine = Packages.Lines[math.random(1, #Packages.Lines)]
-        if RandomLine and type(RandomLine) == "string" then
-            local TargetChannel = TextChatService:FindFirstChild("RBXGeneral")
-            if TargetChannel then
-                TargetChannel:SendAsync(RandomLine)
+        local randomLine = "Your random line here" -- Replace with your random line logic
+        if randomLine and type(randomLine) == "string" then
+            local textChannel = TextChatService:FindFirstChild("RBXGeneral")
+            if textChannel then
+                textChannel:SendAsync(randomLine)
             else
                 warn("RBXGeneral channel not found!")
             end
