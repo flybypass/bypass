@@ -12,10 +12,11 @@ local Services = setmetatable({}, {
 })
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TextChatService = game:GetService("TextChatService")
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "Rizzler - 1.0",
+    Name = "Rizzler - 1-0",
     LoadingTitle = "Rizzler",
     LoadingSubtitle = "by @exrand",
     DisableRayfieldPrompts = true,
@@ -58,16 +59,34 @@ Tabs.Main:CreateDropdown({
     end
 })
 
-local function sendMessage(message)
-    local chatEvents = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents")
-    local sayMessageEvent = chatEvents:WaitForChild("SayMessageRequest")
-
-    local success, err = pcall(function()
-        sayMessageEvent:FireServer(message, Enum.ChatColor.White)
-    end)
-    
-    if not success then
-        warn("Error sending message: " .. err)
+local sendMessage = function(message)
+    if TextChatService then
+        local textChannels = TextChatService:FindFirstChild("TextChannels")
+        if textChannels then
+            local textChannel = textChannels:WaitForChild("RBXGeneral")
+            if textChannel then
+                textChannel:SendAsync(message)
+                return
+            else
+                warn("No suitable text channel found in TextChatService. Falling back to legacy chat.")
+                if ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") then
+                    ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
+                else
+                    warn("Legacy chat events are not available.")
+                end
+            end
+        else
+            warn("TextChannels not found in TextChatService. Falling back to legacy chat.")
+            if ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") then
+                ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
+            else
+                warn("Legacy chat events are not available.")
+            end
+        end
+    elseif ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") then
+        ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
+    else
+         warn("Legacy chat events are not available.")
     end
 end
 
