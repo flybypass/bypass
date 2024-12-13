@@ -16,7 +16,7 @@ local TextChatService = game:GetService("TextChatService")
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "Rizzler - 1.0",
+    Name = "Rizzler - 1.1",
     LoadingTitle = "Rizzler",
     LoadingSubtitle = "by @exrand",
     DisableRayfieldPrompts = true,
@@ -63,37 +63,28 @@ local sendMessage = function(message)
     if TextChatService then
         local textChannels = TextChatService:FindFirstChild("TextChannels")
         if textChannels then
-            local textChannel = textChannels:WaitForChild("RBXGeneral")
+            local textChannel = textChannels:FindFirstChild("RBXGeneral")
             if textChannel then
                 textChannel:SendAsync(message)
                 return
             else
-                warn("No suitable text channel found in TextChatService. Falling back to legacy chat.")
-                if ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") then
-                    ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
-                else
-                    warn("Legacy chat events are not available.")
-                end
+                warn("RBXGeneral channel not found in TextChatService.")
             end
         else
-            warn("TextChannels not found in TextChatService. Falling back to legacy chat.")
-            if ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") then
-                ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
-            else
-                warn("Legacy chat events are not available.")
-            end
+            warn("TextChannels not found in TextChatService.")
         end
-    elseif ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") then
+    end
+    if ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") then
         ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
     else
-         warn("Legacy chat events are not available.")
+        warn("Legacy chat events are not available.")
     end
 end
 
 Tabs.Main:CreateButton({
     Name = "Say Line",
     Callback = function()
-        if Line and type(Line) == "string" then
+        if Line and type(Line) == "string" and Line ~= "Select a line here!" then
             sendMessage(Line)
         else
             warn("Invalid Line selected!")
@@ -104,7 +95,12 @@ Tabs.Main:CreateButton({
 Tabs.Main:CreateButton({
     Name = "Say Random Line",
     Callback = function()
-        local RandomLine = "Line 1"
-        sendMessage(RandomLine)
+        local RandomLine = Packages.Lines[math.random(1, #Packages.Lines)]
+        if RandomLine and type(RandomLine) == "string" then
+            sendMessage(RandomLine)
+        else
+            warn("No valid random line found!")
+        end
     end
 })
+
