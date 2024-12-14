@@ -19,7 +19,7 @@ local Packages = {
 }
 
 local Window = Rayfield:CreateWindow({
-    Name = "Rizzler - 1-0",
+    Name = "Rizzer",
     LoadingTitle = "Rizzler",
     LoadingSubtitle = "by @exrand",
     DisableRayfieldPrompts = true,
@@ -41,7 +41,7 @@ local Window = Rayfield:CreateWindow({
         FileName = "Key",
         SaveKey = true,
         GrabKeyFromSite = false,
-        Key = {"therail"}
+        Key = {"rizz"}
     }
 })
 
@@ -51,11 +51,10 @@ local Tabs = {
 local RizzlerModule = Tabs.Main:CreateSection("Rizzler")
 
 Tabs.Main:CreateLabel(#Packages.Lines .. " lines are on your fingertips.")
-local Line = "Select a line here!"
 Tabs.Main:CreateDropdown({
     Name = "Select Line",
     Options = Packages.Lines,
-    CurrentOption = {Line},
+    CurrentOption = {"Select a line here!"},
     MultipleOptions = false,
     Flag = "Dropdown1",
     Callback = function(Option)
@@ -63,35 +62,14 @@ Tabs.Main:CreateDropdown({
     end
 })
 
-local sendMessage = function(message)
-    if TextChatService then
-        local textChannels = TextChatService:FindFirstChild("TextChannels")
-        if textChannels then
-            local textChannel = textChannels:FindFirstChild("RBXGeneral")
-            if textChannel then
-                textChannel:SendAsync(message)
-                return
-            else
-                warn("RBXGeneral channel not found in TextChatService.")
-            end
-        else
-            warn("TextChannels not found in TextChatService.")
-        end
-    end
-    if ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") then
-        ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
-    else
-        warn("Legacy chat events are not available.")
-    end
-end
-
 Tabs.Main:CreateButton({
     Name = "Say Line",
     Callback = function()
-        if Line and type(Line) == "string" and Line ~= "Select a line here!" then
-            sendMessage(Line)
+        if Remote then
+            Remote:FireServer(Line, "All")
         else
-            warn("Invalid Line selected!")
+            TargetChannel = TextChatService.TextChannels["RBXGeneral"]
+            TargetChannel:SendAsync(Line)
         end
     end
 })
@@ -99,11 +77,12 @@ Tabs.Main:CreateButton({
 Tabs.Main:CreateButton({
     Name = "Say Random Line",
     Callback = function()
-        local RandomLine = Packages.Lines[math.random(1, #Packages.Lines)]
-        if RandomLine and type(RandomLine) == "string" then
-            sendMessage(RandomLine)
+        RandomLine = Packages.Lines[math.random(1, #Packages.Lines)]
+        if Remote then
+            Remote:FireServer(RandomLine, "All")
         else
-            warn("No valid random line found!")
+            TargetChannel = TextChatService.TextChannels["RBXGeneral"]
+            TargetChannel:SendAsync(RandomLine)
         end
     end
 })
