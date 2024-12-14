@@ -58,7 +58,7 @@ Tabs.Main:CreateDropdown({
     MultipleOptions = false,
     Flag = "Dropdown1",
     Callback = function(Option)
-        Line = Option
+        Line = CurrentOption
     end
 })
 
